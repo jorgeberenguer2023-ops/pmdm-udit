@@ -1,1 +1,63 @@
+# ==============================
+# ANDROID / ANDROID STUDIO
+# ==============================
 
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Local Android SDK configuration
+local.properties
+
+# Android Studio generated files
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Kotlin
+*.kotlin_module
+
+# APKs
+*.apk
+*.ap_
+*.aab
+
+# Generated Android files
+output-metadata.json
+
+# ==============================
+# LOGS / TEMPORARY FILES
+# ==============================
+
+*.log
+*.tmp
+*.temp
+
+# ==============================
+# OPERATING SYSTEM
+# ==============================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# ==============================
+# SECRETS / LOCAL CONFIGURATION
+# ==============================
+
+.env
+.env.*
+!.env.example
