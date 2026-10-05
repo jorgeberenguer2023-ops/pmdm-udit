@@ -4,13 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.miprimeraapp"
-    compileSdk {
-        version = release(37)
-    }
+    namespace = "com.example.reto1_tarjetapresentacion"
+    compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.miprimeraapp"
+        applicationId = "com.example.reto1_tarjetapresentacion"
         minSdk = 23
         targetSdk = 37
         versionCode = 1
@@ -21,15 +19,15 @@ android {
 
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = false
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         compose = true
     }
@@ -42,8 +40,14 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation("androidx.compose.foundation:foundation:1.6.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.ui:ui:1.6.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
+    implementation("androidx.activity:activity-compose:1.9.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

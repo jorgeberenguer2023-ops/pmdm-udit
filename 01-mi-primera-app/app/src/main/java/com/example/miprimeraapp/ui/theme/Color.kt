@@ -1,4 +1,4 @@
-package com.example.miprimeraapp.ui.theme
+package com.example.reto1_tarjetapresentacion.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
