@@ -94,14 +94,40 @@ val catalogoHamburguesas = listOf(
 )
 
 @Composable
-fun CatalogoHamburguesas(productos: List<Producto>, modifier: Modifier = Modifier) {
+fun CatalogoHamburguesas(productos: List<Producto>) {
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(productos) { producto ->
             TarjetaProducto(producto)
+        }
+    }
+}
+// Tarjeta de producto
+// una caja con imagen arriba y detras + boton
+@Composable
+fun TarjetaProducto(producto: Producto ){
+
+    //Card: una superficie elevada con sombra y bordes redondeados
+
+    Card (
+    modifier = Modifier.fillMaxWidth()
+    )
+
+    {
+        //Column: organiza los elementos verticalmente de arriba a abajo
+        Column {
+            Image(
+                painter = painterResource(id = producto.imagenResId),
+                contentDescription = producto.nombre,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp),
+                contentScale = ContentScale.Crop
+            )
+
         }
     }
 }
