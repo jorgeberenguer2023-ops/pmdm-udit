@@ -3,7 +3,6 @@ package com.example.myapplication
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -29,7 +28,6 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,9 +54,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.burgershop.ui.theme.CamisetasShopTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -67,10 +66,9 @@ import java.util.Locale
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         setContent {
-            MyApplicationTheme {
+            CamisetasShopTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -81,18 +79,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// PANTALLA DE PORTADA
+// PANTALLA DE PORTADA (Splash Screen con temporizador)
 @Composable
 fun PantallaPrincipal() {
-
-    // remember + mutableStateOf: crea una variable que Compose vigila
-    // Cuando su valor cambia, Compose vuelve a dibujar la pantalla solo,
-    // sin que tengas que hacer nada más
-
     var mostrarPortada by remember { mutableStateOf(true) }
 
-    // LaunchedEffect: Lanza una tarea que se ejecuta una sola vez
-    // cuando la pantalla aparece
     LaunchedEffect(Unit) {
         delay(1500L)
         mostrarPortada = false
@@ -115,7 +106,7 @@ fun PantallaPrincipal() {
     }
 }
 
-// PANTALLA DE CARGA (Splash / Loading)
+// PANTALLA DE CARGA
 @Composable
 fun PantallaDeCarga() {
     Box(
@@ -127,7 +118,7 @@ fun PantallaDeCarga() {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "🍔 Burger Shop",
+                text = "👕 Camisetas Shop",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -138,7 +129,7 @@ fun PantallaDeCarga() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Cargando nuestro catálogo...",
+                text = "Cargando catálogo de camisetas...",
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -146,11 +137,11 @@ fun PantallaDeCarga() {
     }
 }
 
-// PANTALLA PRINCIPAL DE LA TIENDA CON TOOLBAR, CARRITO Y NOTIFICACIONES
+// PANTALLA PRINCIPAL DE LA TIENDA CON TOOLBAR Y CARRITO
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TiendaMainScreen() {
-    val carrito = remember { mutableStateListOf<Producto>() }
+    val carrito = remember { mutableStateListOf<Camiseta>() }
     var mostrarDialogoCarrito by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -161,7 +152,7 @@ fun TiendaMainScreen() {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "🍔 Burger Shop",
+                        text = "👕 Camisetas Shop",
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -192,12 +183,12 @@ fun TiendaMainScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            CatalogoHamburguesas(
-                productos = catalogoHamburguesas,
-                onAgregarAlCarrito = { producto ->
-                    carrito.add(producto)
+            CatalogoCamisetas(
+                camisetas = catalogoCamisetas,
+                onAgregarAlCarrito = { camiseta ->
+                    carrito.add(camiseta)
                     scope.launch {
-                        snackbarHostState.showSnackbar("¡${producto.nombre} añadida al carrito!")
+                        snackbarHostState.showSnackbar("¡${camiseta.nombre} añadida al carrito!")
                     }
                 }
             )
@@ -213,7 +204,7 @@ fun TiendaMainScreen() {
                         carrito.clear()
                         mostrarDialogoCarrito = false
                         scope.launch {
-                            snackbarHostState.showSnackbar("🎉 ¡Pedido realizado con éxito!")
+                            snackbarHostState.showSnackbar("🎉 ¡Pedido de camisetas realizado con éxito!")
                         }
                     }
                 )
@@ -222,8 +213,8 @@ fun TiendaMainScreen() {
     }
 }
 
-// MODELO DE DATOS DE PRODUCTO
-data class Producto(
+// MODELO DE DATOS DE CAMISETA
+data class Camiseta(
     val nombre: String,
     val precio: String,
     val precioNumerico: Double,
@@ -231,50 +222,50 @@ data class Producto(
 )
 
 // DATOS DE PRUEBA
-val catalogoHamburguesas = listOf(
-    Producto(
-        nombre = "Burger Clásica",
-        precio = "6,50 €",
-        precioNumerico = 6.50,
-        imagenResId = R.drawable.burger_clasica
+val catalogoCamisetas = listOf(
+    Camiseta(
+        "Camiseta Básica Negra",
+        "14,99 €",
+        14.99,
+        R.drawable.camiseta1
     ),
-    Producto(
-        nombre = "Burger BBQ",
-        precio = "7,50 €",
-        precioNumerico = 7.50,
-        imagenResId = R.drawable.burger_bbq
+    Camiseta(
+        "Camiseta Estampada Retro",
+        "19,99 €",
+        19.99,
+        R.drawable.camiseta2
     ),
-    Producto(
-        nombre = "Burger Doble",
-        precio = "7,50 €",
-        precioNumerico = 7.50,
-        imagenResId = R.drawable.burger_doble
+    Camiseta(
+        "Camiseta Oversize Blanca",
+        "17,50 €",
+        17.50,
+        R.drawable.camiseta3
     ),
-    Producto(
-        nombre = "Burger Picante",
-        precio = "8,50 €",
-        precioNumerico = 8.50,
-        imagenResId = R.drawable.burger_picante
+    Camiseta(
+        "Camiseta Deportiva",
+        "22,00 €",
+        22.00,
+        R.drawable.camiseta4
     ),
-    Producto(
-        nombre = "Burger Pollo",
-        precio = "7,50 €",
-        precioNumerico = 7.50,
-        imagenResId = R.drawable.burger_pollo
+    Camiseta(
+        "Camiseta Manga Larga",
+        "18,99 €",
+        18.99,
+        R.drawable.camiseta5
     ),
-    Producto(
-        nombre = "Burger Vegetariana",
-        precio = "7,50 €",
-        precioNumerico = 7.50,
-        imagenResId = R.drawable.burger_vegetariana
+    Camiseta(
+        "Camiseta Vintage",
+        "21,50 €",
+        21.50,
+        R.drawable.camiseta6
     )
 )
 
-// CATÁLOGO DE HAMBURGUESAS ORGANIZADO EN CUADRÍCULA ADAPTATIVA (GRID)
+// CATÁLOGO DE CAMISETAS ORGANIZADO EN CUADRÍCULA ADAPTATIVA (GRID)
 @Composable
-fun CatalogoHamburguesas(
-    productos: List<Producto>,
-    onAgregarAlCarrito: (Producto) -> Unit
+fun CatalogoCamisetas(
+    camisetas: List<Camiseta>,
+    onAgregarAlCarrito: (Camiseta) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 150.dp),
@@ -283,29 +274,28 @@ fun CatalogoHamburguesas(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(productos) { producto ->
-            TarjetaProducto(
-                producto = producto,
-                onAgregarAlCarrito = { onAgregarAlCarrito(producto) }
+        items(camisetas) { camiseta ->
+            TarjetaCamiseta(
+                camiseta = camiseta,
+                onAgregarAlCarrito = { onAgregarAlCarrito(camiseta) }
             )
         }
     }
 }
 
-// TARJETA DE PRODUCTO INDIVIDUAL
+// TARJETA DE CAMISETA INDIVIDUAL
 @Composable
-fun TarjetaProducto(
-    producto: Producto,
+fun TarjetaCamiseta(
+    camiseta: Camiseta,
     onAgregarAlCarrito: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column {
             Image(
-                painter = painterResource(id = producto.imagenResId),
-                contentDescription = producto.nombre,
+                painter = painterResource(id = camiseta.imagenResId),
+                contentDescription = camiseta.nombre,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp),
@@ -316,17 +306,21 @@ fun TarjetaProducto(
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(
-                    text = producto.nombre,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    text = camiseta.nombre,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = Ellipsis
                 )
+
                 Spacer(modifier = Modifier.height(4.dp))
+
                 Text(
-                    text = producto.precio,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium
+                    text = camiseta.precio,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.primary
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
@@ -343,7 +337,7 @@ fun TarjetaProducto(
 // DIÁLOGO / MODAL DEL CARRITO DE COMPRAS
 @Composable
 fun DialogoCarrito(
-    carrito: List<Producto>,
+    carrito: List<Camiseta>,
     onDismiss: () -> Unit,
     onVaciarCarrito: () -> Unit,
     onRealizarPedido: () -> Unit
@@ -361,7 +355,7 @@ fun DialogoCarrito(
         text = {
             if (carrito.isEmpty()) {
                 Text(
-                    text = "El carrito está vacío. ¡Añade algunas hamburguesas!",
+                    text = "El carrito está vacío. ¡Añade algunas camisetas!",
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
             } else {
